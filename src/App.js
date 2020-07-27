@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Button from "react-bootstrap/Button";
 
 const API = "https://cat-fact.herokuapp.com/";
 const DEFAULT_QUERY = "facts";
@@ -10,6 +11,7 @@ class App extends Component {
     this.state = {
       isLoading: true,
       items: [],
+      visibleItems: [],
       error: null,
     };
   }
@@ -20,6 +22,7 @@ class App extends Component {
       .then((data) => {
         this.setState({
           items: data["all"],
+          visibleItems: this.getRandomElements(data["all"], 5),
           isLoading: false,
         });
       })
@@ -66,28 +69,48 @@ class App extends Component {
   getRandomElements(items, size) {
     const randomElements = [];
     for (let i = 0; i < size; i++) {
-      randomElements.push(items[Math.floor(Math.random() * items.length)]);
+      while (true) {
+        const index = Math.floor(Math.random() * items.length);
+        const randomItem = items[index];
+        const alreadyExists = randomElements.some(
+          (item) => item._id === randomItem._id
+        );
+        if (!alreadyExists) {
+          randomElements.push(randomItem);
+          break;
+        }
+      }
     }
     return randomElements;
   }
 
+  generateFacts() {
+    this.setState((prevState) => ({
+      ...prevState,
+      visibleItems: this.getRandomElements(prevState.items, 5),
+    }));
+  }
+
   render() {
-    const { isLoading, items, error } = this.state;
+    const { isLoading, visibleItems, error } = this.state;
     return (
       <React.Fragment>
         <h1>Random facts about cats</h1>
         {error ? <p>{error.message}</p> : null}
         {!isLoading ? (
-          this.getRandomElements(items, 5).map((item) => {
-            const rowData = this.getRowData(item);
-            return rowData ? (
-              <div key={rowData.id}>
-                <p>User: {rowData.user}</p>
-                <p>Fact: {rowData.text}</p>
-                <hr />
-              </div>
-            ) : null;
-          })
+          <>
+            {visibleItems.map((item) => {
+              const rowData = this.getRowData(item);
+              return rowData ? (
+                <div key={rowData.id}>
+                  <p>User: {rowData.user}</p>
+                  <p>Fact: {rowData.text}</p>
+                  <hr />
+                </div>
+              ) : null;
+            })}
+            <Button onClick={() => this.generateFacts()}>More Facts!</Button>
+          </>
         ) : (
           <h3>Loading...</h3>
         )}

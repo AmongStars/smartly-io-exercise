@@ -112,7 +112,10 @@ class App extends Component {
             <Button onClick={() => this.generateFacts()}>More Facts!</Button>
           </>
         ) : (
-          <h3>Loading...</h3>
+          <div>
+            <h3>Loading...</h3>
+            <img src="cat.gif" alt="Loading"/>
+          </div>
         )}
       </React.Fragment>
     );

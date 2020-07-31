@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import "./App.css";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { getRandomElements, getRowData } from "./utils.js";
 
-const API = "https://cat-fact.herokuapp.com/";
-const DEFAULT_QUERY = "facts";
+const API = process.env.REACT_APP_API;
+const DEFAULT_QUERY = process.env.REACT_APP_DEFAULT_QUERY;
 
 class App extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class App extends Component {
       .then((data) => {
         this.setState({
           items: data["all"],
-          visibleItems: this.getRandomElements(data["all"], 5),
+          visibleItems: getRandomElements(data["all"], 5),
           isLoading: false,
         });
       })
@@ -39,58 +40,10 @@ class App extends Component {
     this.fetchFacts();
   }
 
-  getRowData(item) {
-    const id = item._id;
-    if (!id) {
-      return null;
-    }
-
-    const name = item?.user?.name;
-    if (!name) {
-      return null;
-    }
-
-    const { first, last } = name;
-    if (!first && !last) {
-      return null;
-    }
-
-    const { text } = item;
-    if (!text) {
-      return null;
-    }
-
-    const user = `${first} ${last}`.trim();
-
-    return {
-      id,
-      user,
-      text,
-    };
-  }
-
-  getRandomElements(items, size) {
-    const randomElements = [];
-    for (let i = 0; i < size; i++) {
-      while (true) {
-        const index = Math.floor(Math.random() * items.length);
-        const randomItem = items[index];
-        const alreadyExists = randomElements.some(
-          (item) => item._id === randomItem._id
-        );
-        if (!alreadyExists) {
-          randomElements.push(randomItem);
-          break;
-        }
-      }
-    }
-    return randomElements;
-  }
-
   generateFacts() {
     this.setState((prevState) => ({
       ...prevState,
-      visibleItems: this.getRandomElements(prevState.items, 5),
+      visibleItems: getRandomElements(prevState.items, 5),
     }));
   }
 
@@ -104,7 +57,7 @@ class App extends Component {
           {!isLoading ? (
             <>
               {visibleItems.map((item) => {
-                const rowData = this.getRowData(item);
+                const rowData = getRowData(item);
                 return rowData ? (
                   <div key={rowData.id}>
                     <Card border="info">
@@ -121,8 +74,8 @@ class App extends Component {
                 <Button
                   style={{
                     backgroundColor: "#9e6712",
-					borderColor: "#9e6712",
-					display: "flex",
+                    borderColor: "#9e6712",
+                    display: "flex",
                     marginLeft: "auto",
                     marginRight: "auto",
                   }}

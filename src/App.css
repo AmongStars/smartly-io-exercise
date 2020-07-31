@@ -1,3 +1,41 @@
+body {
+  background-color: #f1d3b0;
+}
+
+.Content {
+  margin-top: 3vw;
+  margin-bottom: 3vw;
+  margin-left: 20vw;
+  margin-right: 20vw;
+}
+
+.Content h1 {
+  text-align: center;
+  margin-bottom: 3vw;
+  color: #69450f;
+}
+
+.User {
+  text-align: right;
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.GifLoading {
+  text-align: center;
+  align-items: center;
+}
+
+.GifLoading h3 {
+  text-align: center;
+  margin-bottom: 5vw;
+  color: #69450f;
+}
+
+.rotation {
+  animation: rotation 2s infinite linear;
+}
+
 .App {
   text-align: center;
 }
@@ -28,11 +66,24 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
+@keyframes rotation {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 576px) {
+  .Content h1 {
+    font-size: 1.8em;
+  }
+
+  .Content {
+    margin-top: 3vw;
+    margin-bottom: 3vw;
+    margin-left: 10vw;
+    margin-right: 10vw;
   }
 }

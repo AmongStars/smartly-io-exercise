@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import "./App.css";
 import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const API = "https://cat-fact.herokuapp.com/";
 const DEFAULT_QUERY = "facts";
@@ -95,28 +98,48 @@ class App extends Component {
     const { isLoading, visibleItems, error } = this.state;
     return (
       <React.Fragment>
-        <h1>Random facts about cats</h1>
-        {error ? <p>{error.message}</p> : null}
-        {!isLoading ? (
-          <>
-            {visibleItems.map((item) => {
-              const rowData = this.getRowData(item);
-              return rowData ? (
-                <div key={rowData.id}>
-                  <p>User: {rowData.user}</p>
-                  <p>Fact: {rowData.text}</p>
-                  <hr />
-                </div>
-              ) : null;
-            })}
-            <Button onClick={() => this.generateFacts()}>More Facts!</Button>
-          </>
-        ) : (
-          <div>
-            <h3>Loading...</h3>
-            <img src="cat.gif" alt="Loading"/>
-          </div>
-        )}
+        <div className="Content">
+          <h1>Random facts about cats</h1>
+          {error ? <p>{error.message}</p> : null}
+          {!isLoading ? (
+            <>
+              {visibleItems.map((item) => {
+                const rowData = this.getRowData(item);
+                return rowData ? (
+                  <div key={rowData.id}>
+                    <Card border="info">
+                      <Card.Body>
+                        <Card.Text>{rowData.text}</Card.Text>
+                        <Card.Text className="User">- {rowData.user}</Card.Text>
+                      </Card.Body>
+                    </Card>
+                    <br />
+                  </div>
+                ) : null;
+              })}
+              <div className="Button-container">
+                <Button
+                  style={{
+                    backgroundColor: "#9e6712",
+					borderColor: "#9e6712",
+					display: "flex",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                  variant="primary"
+                  onClick={() => this.generateFacts()}
+                >
+                  More Facts!
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className="GifLoading">
+              <h3>Loading...</h3>
+              <img src="cat.gif" alt="Loading" className="rotation" />
+            </div>
+          )}
+        </div>
       </React.Fragment>
     );
   }

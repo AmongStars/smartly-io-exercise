@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import "./App.css";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { getRandomElements, getRowData } from "./utils.js";
+import { getRandomElements, getRowData } from "utils.js";
 
 const API = process.env.REACT_APP_API;
 const DEFAULT_QUERY = process.env.REACT_APP_DEFAULT_QUERY;
